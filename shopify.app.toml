@@ -1,0 +1,36 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "b9da98a5bfcd3f0e434cd0f0c3b7847d"
+name = "Smart Cart Marge"
+handle = "smart-cart-marge"
+application_url = "https://buy-ruby-segment-specialist.trycloudflare.com"
+embedded = true
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://buy-ruby-segment-specialist.trycloudflare.com/auth/callback",
+  "https://buy-ruby-segment-specialist.trycloudflare.com/auth/shopify/callback",
+  "https://buy-ruby-segment-specialist.trycloudflare.com/api/auth/callback"
+]
+
+[pos]
+embedded = false
