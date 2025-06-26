@@ -9,7 +9,16 @@ import {
   BlockStack,
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
+import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
+
+async function getTables() {
+  const tables = await prisma.$queryRaw`SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'`; // change based on DB
+  console.log('ENV at runtime:', process.env.DATABASE_URL);
+}
+
+getTables();
 export default function SettingsPage() {
   return (
     <Page>

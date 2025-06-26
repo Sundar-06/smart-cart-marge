@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlserver"
-  url      = env("DATABASE_URL")
+  url      = "sqlserver://192.168.27.12:1433;database=PersistentCart;user={myvisitmaker};password={$ystempassoword*1};encrypt=true;trustServerCertificate=true"
 }
 
 model session {
@@ -23,4 +23,45 @@ model session {
   locale        String?
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
+}
+
+model Shop {
+  id            Int       @id @default(autoincrement())
+  shopifyDomain String    @unique
+  accessToken   String
+  shopName      String?
+  email         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  customers     Customer[]
+}
+
+model Customer {
+  id                Int       @id @default(autoincrement())
+  shopifyCustomerId BigInt
+  shopId            Int
+  email             String?
+  firstName         String?
+  lastName          String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @default(now())
+  shop              Shop      @relation(fields: [shopId], references: [id])
+
+  @@unique([shopifyCustomerId, shopId])
+}
+
+model PersistentCart {
+  id                   Int       @id @default(autoincrement())
+  shopifyDomain        String
+  shopifyCustomerId    BigInt
+  customerEmail        String
+  cartJson             String
+  cartToken            String
+  totalLineItemsCount  Int
+  totalPrice           Int
+  cartStatus           String    @default("active")
+  lastUpdated          DateTime  @default(now())
+  createdAt            DateTime  @default(now())
+
+  @@unique([shopifyDomain, shopifyCustomerId])
 }
